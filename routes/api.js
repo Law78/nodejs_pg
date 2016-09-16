@@ -15,7 +15,9 @@ var api = {
 		router.route('/:id').delete(controller.delete());
 		// UPDATE
 		router.route('/:id').put(controller.update());
-		
+		// READ
+		router.route('/:id').get(controller.read());
+
 		router.route('/find/:id').get(controller.findById());
 		router.route('/count').get(controller.count());
 		router.route('/ping').get(controller.ping());

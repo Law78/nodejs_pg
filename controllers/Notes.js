@@ -81,6 +81,20 @@ module.exports = function() {
 			  });
 			}
 		},
+		read: function (idNotes) {
+		  return function(req,res,next){
+		  	var results = [];
+
+				  // Grab id from URL request
+				  var dataReceived = {id: req.params.id};
+
+				  db.notes.findById(dataReceived.id)
+				  .then(results => {
+				      console.log("RESULTS:", results);
+				      return res.json(results);
+				  });
+		  }
+		},
 		findById: function (idNotes) {
 	  return function(req,res,next){
 	  	var results = [];

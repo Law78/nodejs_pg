@@ -46,6 +46,15 @@ function Note(obj) {
         });
     },
 
+     read: function (id) {
+      return obj.map("SELECT id, text from items WHERE id = $1", id, data=>{
+        return {
+          text: data.text,
+          id: data.id
+        }
+      });
+    },
+
 
     count: function () {
       return obj.one("SELECT count(*) FROM items", [], i=>+i.count);
