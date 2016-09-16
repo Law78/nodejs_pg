@@ -6,11 +6,11 @@ var note = require('../models/Note.js');
 module.exports = function() {
 
 	var options = {
-    capTX: true, // capitalize transaction commands;
-    extend: function () {
-        // our 'notes' repository extension:
-        this.notes = note(this);
-    }
+		capTX: true, // capitalize transaction commands;
+		extend: function () {
+		    // our 'notes' repository extension:
+		    this.notes = note(this);
+		}
 	};
 	 
 	monitor.attach(options); // attaching to all events;
@@ -31,8 +31,41 @@ module.exports = function() {
 
 			  db.notes.add(dataReceived.text, dataReceived.complete)
 			  .then(results => {
-			      console.log("RESULTS:", results);
+			      console.log("INSERT RESULTS:", results);
 			      return res.json(results);
+			  });
+
+			}
+		},
+		delete: function(){
+			return function(req, res, next){
+				var result;
+
+				var dataReceived = {id: req.params.id}
+
+				db.notes.delete(dataReceived.id)
+				.then( result => {
+					console.log("DELETE RESULT: ", result);
+					return res.json(result);
+				})
+			}
+		},
+		update: function(){
+			return function(req, res, next){
+				var results = [];
+
+			  // Grab data from http request
+			  var dataReceived = {text: req.body.text, complete: req.body.complete};
+			  var note = {id: req.params.id};
+
+			  db.notes.update(dataReceived, note.id)
+			  .then(results => {
+			     console.log("UPDATE RESULTS:", results);
+			     return res.json(results);
+			  })
+			  .catch(function(error){
+			  	console.log("UPDATE ERRORS:", error)
+			  	return res.json(error);
 			  });
 
 			}
@@ -49,8 +82,8 @@ module.exports = function() {
 			}
 		},
 		findById: function (idNotes) {
-      return function(req,res,next){
-      	var results = [];
+	  return function(req,res,next){
+	  	var results = [];
 
 			  // Grab id from URL request
 			  var dataReceived = {id: req.params.id};
@@ -60,9 +93,9 @@ module.exports = function() {
 			      console.log("RESULTS:", results);
 			      return res.json(results);
 			  });
-      }
-    },
-    // A Test function
+	  }
+	},
+	// A Test function
 		ping: function(){
 			return function(req, res, next){
 				console.log('PING...NOTES');
